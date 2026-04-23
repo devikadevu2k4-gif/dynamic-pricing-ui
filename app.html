@@ -1,0 +1,38 @@
+<div class="main-wrapper">
+  <div class="header">
+    <h1>Dynamic Pricing Management</h1>
+    <button class="add-btn" (click)="addColumn()">+ Add New Tier</button>
+  </div>
+
+  <div class="card-grid">
+    @for (item of pricingData(); track $index) {
+      <div class="pricing-card">
+        <div class="card-header">
+          <h3>{{ item.tier }}</h3>
+          <button class="delete-icon" (click)="removeColumn($index)">×</button>
+        </div>
+
+        <div class="input-group">
+          <label>Base Price ($)</label>
+          <input type="number" [value]="item.price" (input)="updatePrice($index, $any($event.target).value)">
+        </div>
+
+        <div class="charges-section">
+          <p>Fixed Setup Fee: <span>${{ item.setupFee }}</span></p>
+          <p>Tax ({{ taxRate() }}%): <span>Percentage Based</span></p>
+        </div>
+
+        <ul class="feature-list">
+          @for (f of item.features; track f) {
+            <li>✓ {{ f }}</li>
+          }
+        </ul>
+
+        <div class="total-footer">
+          <small>Total (Incl. Tax)</small>
+          <h2>${{ calculateTotal(item.price, item.setupFee) | number:'1.2-2' }}</h2>
+        </div>
+      </div>
+    }
+  </div>
+</div>
